@@ -1,0 +1,237 @@
+
+sudo pacman -Syu
+
+very ligth
+sudo pacman -S xorg-server xorg-xinit xorg-xrandr xorg-xsetroot firefox nitrogen picom
+
+cp /etc/X11/xinit/xinitrc .xinitrc
+ls -a
+vim .xinitrc
+delate the last 5 lines from rwm &
+
+write
+# keyboard Layout for countries other the USA
+setxkbmap ch &
+
+# Display Resolution
+xrandr --output Virtual-1 --mode 1200x800 &
+
+# Compositor picom or compton
+picom -f &
+
+#Execute DWM
+exec dwm
+
+
+*******************************************************
+
+sudo pacman -S wget
+for void: sudo xbps-install -S libX11-devel libXft-devel libXinerama-devel
+sudo pacman -S base-devel # (install make etc)
+
+
+$ wget https://dl.suckless.org/dwm/dwm-6.2.tar.gz
+ls
+tar -xzvf dwm-6.2.tar.gz
+
+ls
+cd dwm-6.2
+sudo make clean install
+
+
+wget https://dl.suckless.org/st/st-0.8.4.tar.gz
+ls
+tar -xzvf st-0.8.4
+cd st-0.8.4
+sudo make clean install
+
+wget https://dl.suckless.org/tools/dmenu-5.0.tar.gz
+tar -xzvf dmenu-5
+ls
+cd dmenu-5.0
+sudo make clean install
+
+
+**************************************
+
+cd
+startx
+
+change dwm and st size font
+cd dwm
+vim config.h  # this is only read file
+sudo vim config.h 
+# change dwm fonts size go to fonts[] and dmenufont[]
+sudo make clean install
+logout
+reload in to see the changes.
+
+# Change fonts in st
+cd st
+sudo vim st
+go to font
+***************************************
+
+
+
+
+
+get a wallpaper
+used nitrogen
+vim .xinitrc
+write:
+nitrogen --restore &
+
+*****************************
+
+change the mod key
+by defoult mod key is mod1 (alt)
+to change to windows key
+cd dwm
+sudo vim config.def.h
+/ define MODKEY
+change 1 for 4
+:wq
+
+sudo cp config.def.h config.h
+sudo make clean install
+
+r4
+
+*****************************
+
+add a while loop so we dont have to restore dwm every time
+vim .xinitrc
+
+while true; do
+	dwm >/dev/null 2>&1
+done
+      
+:wq
+
+
+***********************
+install patch
+sudo pacman -S patch
+
+go to the patch file an opened
+for example for dwm rigth clik in the file and save in dwm
+
+in the terminal cd dwm
+ls find dwm-fullgaps-6.2.diff o the patch we copy
+
+$ patch -p1 < dwm-full.............diff
+
+$ sudo cp config.def.h config.h
+
+sudo make clean install 
+restart dwm
+
+
+# to remove the patch
+$ patch -R < dwm-full..........diff
+
+*************************************
+
+DWM: Git install & Patching
+
+******************************************
+DWM: Status bar customization
+
+install yay
+git clone https://aur.archlinux.org/yay-git.git
+ls -al
+cd yay-git
+ls -al
+makepkg -si
+
+
+sudo pacman -S alsa-utils pamixer playerctl ttf-font-awesome
+
+dwm-bar
+
+
+COLORS
+https://github.com/NLKNguyen/papercolor-theme
+
+https://github.com/rafi/awesome-vim-colorschemes
+
+
+DWM
+
+dwm-pertag-20200914-61bb8b2.diff cd 
+
+dwm-uselessgap-20200719-bb2e722.diff
+
+dwm-bottomstack-20160719-56a31dc.diff
+
+dwm-scratchpad-20170207-bb3bd6f.diffnabor
+
+dwm-deck-6.0.diff  # add two lines
+{ "[D]",      deck },
+{ MODKEY,                       XK_c,      setlayout,      {.v = &layouts[3]} },
+
+next prev tag
+shiftview patch
+https://lists.suckless.org/dev/1104/7590.html
+
+shiftview.c
+
+/** Function to shift the current view to the left/right
+ *
+ * @param: "arg->i" stores the number of tags to shift right (positive value)
+ *          or left (negative value)
+ */
+void
+shiftview(const Arg *arg) {
+	Arg shifted;
+
+	if(arg->i > 0) // left circular shift
+		shifted.ui = (selmon->tagset[selmon->seltags] << arg->i)
+		   | (selmon->tagset[selmon->seltags] >> (LENGTH(tags) - arg->i));
+
+	else // right circular shift
+		shifted.ui = selmon->tagset[selmon->seltags] >> (- arg->i)
+		   | selmon->tagset[selmon->seltags] << (LENGTH(tags) + arg->i);
+
+	view(&shifted);
+}
+
+#include "shiftwiew.c"
+static Key Keys[] = {
+
+{ MODKEY|ControlMask,                   XK_n,      shiftview,       {.i = +1 } },
+{ MODKEY|ControlMask,                   XK_b,      shiftview,       {.i = -1 } },
+
+
+
+
+
+
+
+
+
+
+
+dwm-functionalgaps-6.2.diff (comes WITHOUT pertag support)
+dwm-functionalgaps-pertagfunctionality-6.2.diff (comes WITH pertag support but WITHOUT the pertag patch)
+dwm-functionalgaps+pertag-6.2.diff (comes WITH pertag support + the pertag patch itself)
+
+
+
+ST
+
+st-alpha-0.8.2.diffsudonabor
+G
+
+
+
+
+
+
+
+
+
+
+
+
