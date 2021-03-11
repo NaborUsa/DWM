@@ -1,0 +1,12 @@
+patch:
+	st-alpha-0.8.2.diff  # transparencia
+	st-gruvbox-dark-0.8.2.diff  # luke theme patch manualy
+	st-scrollback-20200419-72e3f6c.diff  
+		Change:
+		{ShiftMask   XK_Page_Up,     kscrollup,      {.i = -1}}
+		{ShiftMask   XK_Page_Down,   kscrolldown,    {.i = -1}}
+		For:
+		ControlMask,   XK_Page_Up,       kscrollup,        {.i = -1}}
+		ControlMask,   XK_Page_Dowm,     kscrolldown,      {.i = -1}}		
+		ControlMask,   XK_k,             kscrollup,        {.i = 1}}
+		ControlMask,   XK_j,             kscrolldown,      {.i = 1}}
