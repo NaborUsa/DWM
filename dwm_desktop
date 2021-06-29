@@ -1,0 +1,47 @@
+As root create a file like this:
+
+$ cat /usr/share/xsessions/dwm.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=dwm
+Comment=Dynamic window manager
+Exec=dwm
+Icon=dwm
+Type=XSession
+with these permissions
+
+$ ls -l /usr/share/xsessions/dwm.desktop
+-rw-r--r-- 1 root root 108 Jun 27 17:24 /usr/share/xsessions/dwm.desktop
+
+Optionally rather than executing dwm directly you could execute a shell script instead that writes stdout / stderr to a file for logging purposes.
+
+E.g.
+
+Exec=startdwm
+and
+
+$ cat /usr/local/bin/startdwm
+#!/bin/sh
+echo "$(date): Starting dwn" >> /path/to/logs/$(date +%Y-%m-%d_%H.dwm.log)
+dwm >> /path/to/logs/$(date +%Y-%m-%d_%H.dwm.log) 2>&1
+
+$ ls -l /usr/local/bin/startdwm
+-rwxr-xr-x 1 root root 204 Sep 19 14:12 /usr/local/bin/startdwm
+
+If you use that then despite the uncool name the cool_autostart patch works pretty well.
+https://dwm.suckless.org/patches/cool_autostart/
+
+If you usually use xinit to launch dwm and would like to do that with your other window managers, make your xinit a script that allows you to specify your window manager. Here's my xinitrc:
+
+session=${1:-dwm}
+
+xrdb ~/.Xresources
+case $session in
+    dwm    ) exec dwm;;
+    bspwm  ) exec bspwm;;
+    xmonad ) exec xmonad;;
+    i3     ) exec i3;;
+    *      ) exec $1;;
+esac
+
+You can then launch whatever you want with startx ~/.xinitrc <insert wm>. I recommend you put a couple aliases for that in your bashrc or zshrc.
